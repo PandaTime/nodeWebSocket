@@ -11,7 +11,6 @@ var jade = require('jade'),
     options = {pretty: true},
     stylus = require('stylus'),
     chokidar = require('chokidar');
-    //str = fs.readFileSync(__dirname + '/test.styl', 'utf8'),
 
 
 
