@@ -5,6 +5,7 @@ var http = require('http'),
     fs = require('fs'),
     path = require('path'),
     mime = require('mime'),
+    socket = require('./server/chat/chat_server.js'),
     cache = {};
 
 var jade = require('jade'),
@@ -24,9 +25,9 @@ var server = http.createServer(function(req,res){
     var absPath = './' + filePath;
     serveStatic(res, cache, absPath);
 }).listen(8080, function(){console.log("Listeting port 8080...")});
+socket.initialize(server);
 
-
-chokidar.watch('./server/css', {ignored: /[\/\\]\./})
+chokidar.watch('./public/css/*.stylus', {ignored: /[\/\\]\./})
     .on('add', function(event, path){
         cssCompile(event);
     })
@@ -37,7 +38,7 @@ chokidar.watch('./server/css', {ignored: /[\/\\]\./})
         var array = event.split('\\') || event.split('/')
         fs.unlink('./public/css/' + array[array.length - 1].split('.')[0] + '.css', function(err){
             if (err) throw err;
-            console.log('./public/css/' + array[array.length - 1].split('.')[0] + '.css');
+            console.log('Deleted ./public/css/' + array[array.length - 1].split('.')[0] + '.css');
         });
         console.log(event);
     });
@@ -51,7 +52,7 @@ function cssCompile(filePath){
                 if(err) {
                     return console.log(err);
                 }
-                console.log("The " + array[array.length - 1].split('.')[0] + " was saved!");
+                console.log('Added or changed ./public/css/' + array[array.length - 1].split('.')[0] + '.css');
             });
         });
 }
